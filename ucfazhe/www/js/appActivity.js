@@ -31,13 +31,12 @@ function trackLocation() {
  navigator.geolocation.watchPosition(getDistanceFromPoint);
 }
 function showPosition(position) {
- document.getElementById('showLocation').innerHTML = "Latitude: " + position.coords.latitude +
- "<br>Longitude: " + position.coords.longitude;
+ document.getElementById('showLocation').innerHTML = "Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude;
  L.circle([position.coords.latitude, position.coords.longitude], 5, {
-color: 'blue',
-fillColor: '#f03',
-fillOpacity: 0.5
-}).addTo(mymap).bindPopup(position.coords.latitude.toString()+","+position.coords.longitude.toString()+"<br />I am here.").openPopup();
+ 	color: 'blue',
+ 	fillColor: '#f03',
+ 	fillOpacity: 0.5
+ }).addTo(mymap).bindPopup(position.coords.latitude.toString()+","+position.coords.longitude.toString()+"<br />I am here.").openPopup();
 }
 
 function getDistanceFromPoint(position) {
