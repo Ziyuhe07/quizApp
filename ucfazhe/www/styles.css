@@ -18,11 +18,10 @@ html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 .demo-avatar {
-  width: 80x;
-  height: 60px;
-
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
 }
-
 .demo-layout .mdl-layout__header .mdl-layout__drawer-button {
   color: rgba(0, 0, 0, 0.54);
 }
@@ -38,7 +37,6 @@ html, body {
 }
 .demo-drawer .demo-navigation {
   z-index: -2;
-  
 }
 /* END iOS Safari specific workaround */
 .demo-drawer .mdl-menu .mdl-menu__item {
@@ -61,7 +59,7 @@ html, body {
       -ms-flex-pack: end;
           justify-content: flex-end;
   padding: 16px;
-  height: 120px;
+  height: 151px;
 }
 .demo-avatar-dropdown {
   display: -webkit-flex;
@@ -125,6 +123,9 @@ html, body {
 }
 .demo-chart:nth-child(4) {
   color: #EF3C79;
+}
+.demo-chart:nth-child(5) {
+color: #EFCF79;
 }
 .demo-graphs {
   padding: 16px 32px;
