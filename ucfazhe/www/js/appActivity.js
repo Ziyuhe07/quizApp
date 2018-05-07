@@ -124,7 +124,7 @@ var feature = geoJSON[0].features[i];
                  var distance = calculateDistance(position.coords.latitude, position.coords.longitude, lat,lng, 'K');
                  document.getElementById('showDistance').innerHTML = "Distance: " + distance;
                      if (distance<0.16){
-	                 L.marker([lat, lng]).addTo(mymap).bindPopup(<b>You were at "+ lng + " "+lat+"!</b>).openPopup();}
+	                 L.marker([lat, lng]).addTo(mymap).bindPopup("<b>You were at "+ lng + " "+lat+"!</b>").openPopup();}
  }
  }
  }
