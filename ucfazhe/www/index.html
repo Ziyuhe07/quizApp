@@ -118,8 +118,6 @@
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
           <a class="mdl-navigation__link" href="" onclick="callDivChange();return false;"><i class="mdlcolor-text--blue-grey-400 material-icons" role="presentation">forum</i>Change Div Content</a>
           <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">delete</i>Trash</a>
-          <a class="mdl-navigation__link" href="" onclick='getEarthquakes();return false;'><i class="mdl-color-text--blue-grey-400
-            material-icons" role="presentation">report</i>Get Earthquakes</a>
           <a class="mdl-navigation__link" href="" onclick='trackLocation();return false;'><i class="mdl-color-text--blue-grey-400 
       material-icons" role="presentation">forum</i>Track Location</a>
           <a class="mdl-navigation__link" href="" onclick='showFormData();return false;'><i class="mdl-color-text--blue-grey-400 
@@ -136,8 +134,16 @@
       <div id="mapid" style="width: 600px; height: 400px;"></div>
       <b>This code will display your current location</b>
           <div id='showLocation'>Location will be displayed here</div>   
-          <b>This code will display your current location</b>
-          <div id='showDistance'>Distance will be displayed here</div>
+          <label for="name">Name</label><input type="text" size="25" id="name"/><br/>
+
+		  <label for="surname">Surname</label><input type="text" size="25" id="surname"/><br/>
+		  <label for="module">Module</label><input type="text" size="25" id="module"/><br />
+		  <p><div id="question">question</div></p>
+		  <div id="answera">A</div><input type="radio" name="answer" value="1" id="a"> <br/>
+		  <div id="answerb">B</div><input type="radio" name="answer" value="2" id="b"> <br/>
+		  <div id="answerc">C</div><input type="radio" name="answer" value="3" id="c"> <br/>
+		  <div id="answerd">D</div><input type="radio" name="answer" value="4" id="d"> <br/>
+		  <p><button id="startUpload" onclick="startDataUpload()">Submit Answer</button></p>
     </main>
     
     </div>

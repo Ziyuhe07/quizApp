@@ -36,32 +36,37 @@
 	}
 /*var clientB;
 	// and a variable that will hold the layer itself – we need to do this outside the function so that we can use it to remove the layer later on
-	var earthquakelayer;
+	var quizQuestionlayer;
 	// create the code to get the Earthquakes data using an XMLHttpRequest
-	function getEarthquakes() {
+	function getQuizQuestion() {
 		clientB = new XMLHttpRequest();
-		clientB.open('GET','https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson');
-		clientB.onreadystatechange = earthquakeResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
+		clientB.open('GET','http://developer.cege.ucl.ac.uk:30271/getGeoJSON/questionform/geom');
+		clientB.onreadystatechange = quizQuestionResponse; // note don't use earthquakeResponse() with brackets as that doesn't work
 		clientB.send();
 	}
 	// create the code to wait for the response from the data server, and process the response once it is received
-	function earthquakeResponse() {
+	function quizQuestionResponse() {
 	// this function listens out for the server to say that the data is ready - i.e. has state 4
 	if (clientB.readyState == 4) {
 	// once the data is ready, process the data
-	var earthquakedata = clientB.responseText;
-	loadEarthquakelayer(earthquakedata);
+	var quizQuestiondata = clientB.responseText;
+	loadQuizQuestion(quizQuestion);
 	}
 	}
 	// convert the received data - which is text - to JSON format and add it to the map
-	function loadEarthquakelayer(earthquakedata) {
+	function loadQuizQuestionlayer(quizQuestion) {
 	// convert the text to JSON
-	var earthquakejson = JSON.parse(earthquakedata);
-	// add the JSON layer onto the map - it will appear using the default icons
-	earthquakelayer = L.geoJson(earthquakejson).addTo(mymap);
+	var quizQuestionjson = JSON.parse(quizQuestion);
+	// JSON layer onto the map - it will appear using the default icons
+	quizQuestionlayer = L.geoJson(quizQuestionjson).addTo(mymap);
 	// change the map zoom so that all the data is shown
-	mymap.fitBounds(earthquakelayer.getBounds());
-	} */
+	mymap.fitBounds(quizQuestionlayer.getBounds());
+	} 
+
+	document.addEventListener('QuizLoaded', function() {
+		getQuizQuestion();
+	}, false); 
+	*/
 
 
 //Track users' location, when user is close to the points set in database, a pop-up will show to notice user fill the quiz
@@ -88,7 +93,7 @@ fillOpacity: 0.5
 
 //Set a function to load geoJSON file from database
 //This should be carefully when use the url for security consideration - not supported by some browsers
-function getJSON(url) {
+function getGeoJSON(url) {
         var resp ;
         var xmlHttp ;
 
@@ -107,7 +112,7 @@ function getJSON(url) {
 
 function getDistanceFromPoint(position) {
 // find the coordinates of a point using the url:
-var geoJSONString = getJSON('http://developer.cege.ucl.ac.uk:30271/getGeoJSON/questionform/geom');
+var geoJSONString = getGeoJSON('http://developer.cege.ucl.ac.uk:30271/getGeoJSON/questionform/geom');
 var geoJSON = JSON.parse(geoJSONString);
 alert(geoJSON[0].features[1].geometry.coordinates[1]);
 
@@ -123,16 +128,32 @@ var feature = geoJSON[0].features[i];
 // return the distance in kilometers
                  var distance = calculateDistance(position.coords.latitude, position.coords.longitude, lat,lng, 'K');
                  document.getElementById('showDistance').innerHTML = "Distance: " + distance;
-                     if (distance<0.16){
-	                 L.marker([lat, lng]).addTo(mymap).bindPopup("<b>You were at "+ lng + " "+lat+"!</b>").openPopup();}
- }
- }
- }
- }
+                     if (distance>0.01){
+	                 L.marker([lat, lng]).addTo(mymap).bindPopup("<b>You were at "+ position.coords.longitude + " "+position.coords.latitude+"!</b>");
+	                 mymap.setView([position.coords.latitude, position.coords.longitude], 13)
+
+	             getQuizAnswer(i);} //Extract the answers in question form (database) by right order
+	         }
+	     }
+	 }
+	  }
+
+	} //Set the distance between users'position and the downloaded location, and then according to the location
+		//give quiz question and answer if users are near to the location.
+
+function getQuizAnswer(i) {
+var geoJSONString = getGeoJSON('http://developer.cege.ucl.ac.uk:30271/getGeoJSON/questionform/geom');
+var geoJSON = JSON.parse(geoJSONString);
+    document.getElementById("question").innerHTML =geoJSON[0].features[i].properties.question;
+    document.getElementById("answera").innerHTML =geoJSON[0].features[i].properties.answera;
+    document.getElementById("answerb").innerHTML =geoJSON[0].features[i].properties.answerb;
+    document.getElementById("answerc").innerHTML =geoJSON[0].features[i].properties.answerc;
+    document.getElementById("answerd").innerHTML =geoJSON[0].features[i].properties.answerd;
 }
 
 
-// code adapted from https://www.htmlgoodies.com/beyond/javascript/calculate-the-distance-between-two-points-inyour-web-apps.html
+
+// code retrived from https://www.htmlgoodies.com/beyond/javascript/calculate-the-distance-between-two-points-inyour-web-apps.html
 function calculateDistance(lat1, lon1, lat2, lon2, unit) {
  var radlat1 = Math.PI * lat1/180;
  var radlat2 = Math.PI * lat2/180;
@@ -149,6 +170,62 @@ function calculateDistance(lat1, lon1, lat2, lon2, unit) {
  if (unit=="N") { dist = dist * 0.8684 ;} // convert miles to nautical miles
  return dist;
  }
+
+// Upload collected quiz answer function
+function startDataUpload() {
+	alert ("Submitting your answer");
+
+	var name = document.getElementById("name").value;
+	var surname = document.getElementById("surname").value;
+	var module = document.getElementById("module").value;
+	var question = document.getElementById("question")
+	alert(question);
+
+	var postString = "name="+name +"&surname="+surname+"&module="+module+question+"&question";
+
+// Set the radio button values
+/*if (document.getElementById("morning").checked) {
+ 		 postString=postString+"&lecturetime=morning";
+	}
+	if (document.getElementById("afternoon").checked) {
+ 		 postString=postString+"&lecturetime=afternoon";
+	}
+	*/
+
+	if (document.getElementById("a").checked) {
+ 		 postString=postString+"&answer"+answer;
+	}
+	if (document.getElementById("b").checked) {
+ 		 postString=postString+"&answer"+answer;
+	}
+	if (document.getElementById("c").checked) {
+ 		 postString=postString+"&answer"+answer;
+	}
+	if (document.getElementById("d").checked) {
+ 		 postString=postString+"&answer"+answer;
+	}
+	
+	processData(postString);
+
+}
+
+
+var client;
+function processData(postString) {
+	client = new XMLHttpRequest();
+	client.open('POST','http://developer.cege.ucl.ac.uk:30271/uploadData',true);
+	client.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	client.onreadystatechange = dataUploaded;
+	client.send(postString);
+	}
+// create the code to wait for the response from the data server, and process the response once it is received
+function dataUploaded() {
+// this function listens out for the server to say that the data is ready - i.e. has state 4
+	if (client.readyState == 4) {
+// change the DIV to show the response
+		document.getElementById("dataUploadResult").innerHTML = client.responseText;
+	}
+}
 
 
 /*
