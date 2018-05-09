@@ -64,6 +64,7 @@ app.use(bodyParser.json());
 	  });
 	});
 	
+	//upload questions infromation to the questionform in database by user setting
 	app.post('/uploadData',function(req,res){
 	// note that we are using POST here as we are uploading data
 	// so the parameters form part of the BODY of the request rather than the RESTful API
@@ -80,6 +81,31 @@ app.use(bodyParser.json());
 				
 				var querystring = "INSERT into questionform (name,question,answera,answerb,answerc,answerd,ranswer,geom) values ('";
 				querystring = querystring + req.body.name + "','" + req.body.question + "','" + req.body.answera + "','"+ req.body.answerb + "','"+ req.body.answerc + "','"+ req.body.answerd + "','"+ req.body.ranswer + "',"+geometrystring+ "))";
+				console.log(querystring);
+				client.query( querystring,function(err,result) {
+					done();
+					if(err){
+						console.log(err);
+						res.status(400).send(err);
+						}
+						res.status(200).send("Information inserted");
+					});
+				});
+			});
+
+	//upload quiz infromation to the questionform in database by user setting		
+	app.post('/uploadQuizData',function(req,res){
+	// note that we are using POST here as we are uploading data
+	// so the parameters form part of the BODY of the request rather than the RESTful API
+			console.dir(req.body);
+			pool.connect(function(err,client,done) {
+				if(err){
+					console.log("not able to get connection "+ err);
+					res.status(400).send(err);
+				}
+				
+				var querystring = "INSERT into quizform (name,question,ranswer) values ('";
+				querystring = querystring + req.body.name + "','" + req.body.question + "','"+ req.body.ranswer + "')";
 				console.log(querystring);
 				client.query( querystring,function(err,result) {
 					done();
